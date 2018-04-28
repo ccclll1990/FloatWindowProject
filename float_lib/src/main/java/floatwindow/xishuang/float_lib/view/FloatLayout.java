@@ -2,6 +2,7 @@ package floatwindow.xishuang.float_lib.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -120,16 +121,18 @@ public class FloatLayout extends FrameLayout {
                 isReleased = true;
 
                 // 当从点击到弹起小于100毫秒的时候,则判断为点击,如果超过则不响应点击事件
-                isclick = !((endTime - startTime) > 0.1 * 1000L);
+                isclick = !((endTime - startTime) > 0.2 * 1000L) && !isMoved;
+                //响应点击事件
+                if (isclick) {
+                    if (onClickListener != null) {
+                        onClickListener.onClick(this);
+                        Log.e("tag","dianji");
 
+                    }
+                }
                 break;
         }
-        //响应点击事件
-        if (isclick) {
-            if (onClickListener != null) {
-                onClickListener.onClick(this);
-            }
-        }
+
 
         return true;
     }
