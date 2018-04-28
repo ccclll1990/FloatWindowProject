@@ -80,16 +80,12 @@ public class FloatLayout extends FrameLayout {
             case MotionEvent.ACTION_UP:
                 endTime = System.currentTimeMillis();
                 //当从点击到弹起小于半秒的时候,则判断为点击,如果超过则不响应点击事件
-                if ((endTime - startTime) > 0.1 * 1000L) {
-                    isclick = false;
-                } else {
-                    isclick = true;
-                }
+                isclick = !((endTime - startTime) > 0.1 * 1000L);
                 break;
         }
         //响应点击事件
         if (isclick) {
-            Toast.makeText(mContext, "我是大傻叼", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "哈哈哈哈", Toast.LENGTH_SHORT).show();
         }
         return true;
     }
