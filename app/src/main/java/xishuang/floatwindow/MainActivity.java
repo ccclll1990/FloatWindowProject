@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import floatwindow.xishuang.float_lib.FloatActionController;
 import floatwindow.xishuang.float_lib.permission.FloatPermissionManager;
@@ -43,11 +44,11 @@ import floatwindow.xishuang.float_lib.permission.FloatPermissionManager;
 public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button btOpenFloat = (Button) findViewById(R.id.open_float);
-        Button btRedDot = (Button) findViewById(R.id.red_dot);
+        Button btOpenFloat = (Button)findViewById(R.id.open_float);
+        Button btRedDot = (Button)findViewById(R.id.red_dot);
 
         assert btOpenFloat != null;
         btOpenFloat.setOnClickListener(this);
@@ -56,13 +57,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v){
         if (v.getId() == R.id.open_float) {
             boolean isPermission = FloatPermissionManager.getInstance().applyFloatWindow(this);
             //有对应权限或者系统版本小于7.0
             if (isPermission || Build.VERSION.SDK_INT < 24) {
                 //开启悬浮窗
                 FloatActionController.getInstance().startMonkServer(this);
+
+                FloatActionController.getInstance().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v){
+                        Toast.makeText(MainActivity.this,"你好呀",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         } else if (v.getId() == R.id.red_dot) {
             //开启小红点
@@ -71,7 +80,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy(){
         super.onDestroy();
         //关闭悬浮窗
         FloatActionController.getInstance().stopMonkServer(this);

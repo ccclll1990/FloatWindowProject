@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.view.View;
 
 import floatwindow.xishuang.float_lib.FloatActionController;
 import floatwindow.xishuang.float_lib.FloatCallBack;
@@ -20,31 +21,31 @@ public class FloatMonkService extends Service implements FloatCallBack {
     private HomeWatcherReceiver mHomeKeyReceiver;
 
     @Override
-    public void onCreate() {
+    public void onCreate(){
         super.onCreate();
         FloatActionController.getInstance().registerCallLittleMonk(this);
         //注册广播接收者
         mHomeKeyReceiver = new HomeWatcherReceiver();
         final IntentFilter homeFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        registerReceiver(mHomeKeyReceiver, homeFilter);
+        registerReceiver(mHomeKeyReceiver,homeFilter);
         //初始化悬浮窗UI
         initWindowData();
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(Intent intent){
         return null;
     }
 
     /**
      * 初始化WindowManager
      */
-    private void initWindowData() {
+    private void initWindowData(){
         FloatWindowManager.createFloatWindow(this);
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy(){
         super.onDestroy();
         //移除悬浮窗
         FloatWindowManager.removeFloatWindowManager();
@@ -56,7 +57,7 @@ public class FloatMonkService extends Service implements FloatCallBack {
 
     /////////////////////////////////////////////////////////实现接口////////////////////////////////////////////////////
     @Override
-    public void guideUser(int type) {
+    public void guideUser(int type){
         FloatWindowManager.updataRedAndDialog(this);
     }
 
@@ -65,7 +66,7 @@ public class FloatMonkService extends Service implements FloatCallBack {
      * 悬浮窗的隐藏
      */
     @Override
-    public void hide() {
+    public void hide(){
         FloatWindowManager.hide();
     }
 
@@ -73,7 +74,7 @@ public class FloatMonkService extends Service implements FloatCallBack {
      * 悬浮窗的显示
      */
     @Override
-    public void show() {
+    public void show(){
         FloatWindowManager.show();
     }
 
@@ -81,7 +82,7 @@ public class FloatMonkService extends Service implements FloatCallBack {
      * 添加数量
      */
     @Override
-    public void addObtainNumer() {
+    public void addObtainNumer(){
         FloatWindowManager.addObtainNumer(this);
         guideUser(4);
     }
@@ -90,7 +91,12 @@ public class FloatMonkService extends Service implements FloatCallBack {
      * 减少数量
      */
     @Override
-    public void setObtainNumber(int number) {
-        FloatWindowManager.setObtainNumber(this, number);
+    public void setObtainNumber(int number){
+        FloatWindowManager.setObtainNumber(this,number);
+    }
+
+    @Override
+    public void setOnClickListener(View.OnClickListener onClickListener){
+        FloatWindowManager.setOnClickListener(onClickListener);
     }
 }

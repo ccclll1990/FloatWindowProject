@@ -32,7 +32,7 @@ public class FloatWindowManager {
      *
      * @param context 必须为应用程序的Context.
      */
-    public static void createFloatWindow(Context context) {
+    public static void createFloatWindow(Context context){
         wmParams = new WindowManager.LayoutParams();
         WindowManager windowManager = getWindowManager(context);
         mFloatLayout = new FloatLayout(context);
@@ -41,7 +41,7 @@ public class FloatWindowManager {
         } else { /*以下代码块使得android6.0之后的用户不必再去手动开启悬浮窗权限*/
             String packname = context.getPackageName();
             PackageManager pm = context.getPackageManager();
-            boolean permission = (PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.SYSTEM_ALERT_WINDOW", packname));
+            boolean permission = (PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.SYSTEM_ALERT_WINDOW",packname));
             if (permission) {
                 wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;
             } else {
@@ -71,7 +71,7 @@ public class FloatWindowManager {
         wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         mFloatLayout.setParams(wmParams);
-        windowManager.addView(mFloatLayout, wmParams);
+        windowManager.addView(mFloatLayout,wmParams);
         mHasShown = true;
         //是否展示小红点展示
         checkRedDot(context);
@@ -80,7 +80,7 @@ public class FloatWindowManager {
     /**
      * 移除悬浮窗
      */
-    public static void removeFloatWindowManager() {
+    public static void removeFloatWindowManager(){
         //移除悬浮窗口
         boolean isAttach = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -93,9 +93,9 @@ public class FloatWindowManager {
     /**
      * 返回当前已创建的WindowManager。
      */
-    private static WindowManager getWindowManager(Context context) {
+    private static WindowManager getWindowManager(Context context){
         if (mWindowManager == null) {
-            mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            mWindowManager = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
         }
         return mWindowManager;
     }
@@ -103,7 +103,7 @@ public class FloatWindowManager {
     /**
      * 小红点展示
      */
-    public static void checkRedDot(Context context) {
+    public static void checkRedDot(Context context){
         if (mFloatLayout == null) return;
         //是否展示小红点展示
         int num = getObtainNumber(context);
@@ -118,55 +118,60 @@ public class FloatWindowManager {
     /**
      * 添加小红点
      */
-    public static void addObtainNumer(Context context) {
-        int number = (int) SpUtil.get(context, Constants_LM.OBTAIN_NUMBER, 0);
+    public static void addObtainNumer(Context context){
+        int number = (int)SpUtil.get(context,Constants_LM.OBTAIN_NUMBER,0);
         if (number < 0) {
             number = 0;
         }
         number = number + 1;
-        SpUtil.put(context, Constants_LM.OBTAIN_NUMBER, number);
+        SpUtil.put(context,Constants_LM.OBTAIN_NUMBER,number);
         if (mFloatLayout != null) {
             mFloatLayout.setDragFlagViewVisibility(View.VISIBLE);
             mFloatLayout.setDragFlagViewText(number);
+            updataRedAndDialog(context);
         }
+    }
+
+    public static void setOnClickListener(View.OnClickListener onClickListener){
+        mFloatLayout.setOnClickListener(onClickListener);
     }
 
     /**
      * 获取小红点展示的数量
      */
-    private static int getObtainNumber(Context context) {
-        return (int) SpUtil.get(context, Constants_LM.OBTAIN_NUMBER, 0);
+    private static int getObtainNumber(Context context){
+        return (int)SpUtil.get(context,Constants_LM.OBTAIN_NUMBER,0);
     }
 
     /**
      * 设置小红点数字
      */
-    public static void setObtainNumber(Context context, int number) {
+    public static void setObtainNumber(Context context,int number){
         if (number < 0) {
             number = 0;
         }
-        SpUtil.put(context, Constants_LM.OBTAIN_NUMBER, number);
+        SpUtil.put(context,Constants_LM.OBTAIN_NUMBER,number);
         FloatWindowManager.checkRedDot(context);
     }
 
     /**
      * 隐藏对话栏，是否小红点
      */
-    public static void updataRedAndDialog(Context context) {
+    public static void updataRedAndDialog(Context context){
         mFloatLayout.setDragFlagViewVisibility(View.VISIBLE);
         //是否展示小红点展示
         checkRedDot(context);
     }
 
-    public static void hide() {
+    public static void hide(){
         if (mHasShown)
             mWindowManager.removeViewImmediate(mFloatLayout);
         mHasShown = false;
     }
 
-    public static void show() {
+    public static void show(){
         if (!mHasShown)
-            mWindowManager.addView(mFloatLayout, wmParams);
+            mWindowManager.addView(mFloatLayout,wmParams);
         mHasShown = true;
     }
 }

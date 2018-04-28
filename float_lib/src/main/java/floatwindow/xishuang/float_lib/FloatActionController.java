@@ -2,6 +2,7 @@ package floatwindow.xishuang.float_lib;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 
 import floatwindow.xishuang.float_lib.service.FloatMonkService;
 
@@ -12,10 +13,10 @@ import floatwindow.xishuang.float_lib.service.FloatMonkService;
  */
 public class FloatActionController {
 
-    private FloatActionController() {
+    private FloatActionController(){
     }
 
-    public static FloatActionController getInstance() {
+    public static FloatActionController getInstance(){
         return LittleMonkProviderHolder.sInstance;
     }
 
@@ -29,30 +30,30 @@ public class FloatActionController {
     /**
      * 开启服务悬浮窗
      */
-    public void startMonkServer(Context context) {
-        Intent intent = new Intent(context, FloatMonkService.class);
+    public void startMonkServer(Context context){
+        Intent intent = new Intent(context,FloatMonkService.class);
         context.startService(intent);
     }
 
     /**
      * 关闭悬浮窗
      */
-    public void stopMonkServer(Context context) {
-        Intent intent = new Intent(context, FloatMonkService.class);
+    public void stopMonkServer(Context context){
+        Intent intent = new Intent(context,FloatMonkService.class);
         context.stopService(intent);
     }
 
     /**
      * 注册监听
      */
-    public void registerCallLittleMonk(FloatCallBack callLittleMonk) {
+    public void registerCallLittleMonk(FloatCallBack callLittleMonk){
         mFloatCallBack = callLittleMonk;
     }
 
     /**
      * 调用引导的方法
      */
-    public void callGuide(int type) {
+    public void callGuide(int type){
         if (mFloatCallBack == null) return;
         mFloatCallBack.guideUser(type);
     }
@@ -60,7 +61,7 @@ public class FloatActionController {
     /**
      * 悬浮窗的显示
      */
-    public void show() {
+    public void show(){
         if (mFloatCallBack == null) return;
         mFloatCallBack.show();
     }
@@ -68,22 +69,30 @@ public class FloatActionController {
     /**
      * 悬浮窗的隐藏
      */
-    public void hide() {
+    public void hide(){
         if (mFloatCallBack == null) return;
         mFloatCallBack.hide();
     }
+
     /**
      * 增加数量
      */
-    public void addObtainNumer() {
+    public void addObtainNumer(){
         if (mFloatCallBack == null) return;
         mFloatCallBack.addObtainNumer();
     }
+
     /**
      * 设置数量
      */
-    public void setObtainNumber(int number) {
+    public void setObtainNumber(int number){
         if (mFloatCallBack == null) return;
         mFloatCallBack.setObtainNumber(number);
     }
+
+    public void setOnClickListener(View.OnClickListener onClickListener){
+        if (mFloatCallBack == null) return;
+        mFloatCallBack.setOnClickListener(onClickListener);
+    }
+
 }

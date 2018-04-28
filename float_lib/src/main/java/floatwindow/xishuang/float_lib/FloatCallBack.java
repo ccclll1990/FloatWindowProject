@@ -1,5 +1,6 @@
 package floatwindow.xishuang.float_lib;
 
+import android.view.View;
 
 /**
  * Author:xishuang
@@ -16,4 +17,6 @@ public interface FloatCallBack {
     void addObtainNumer();
 
     void setObtainNumber(int number);
+
+    void setOnClickListener(View.OnClickListener onClickListener);
 }
