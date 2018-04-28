@@ -1,8 +1,8 @@
 package xishuang.floatwindow;
 
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -40,7 +40,7 @@ import floatwindow.xishuang.float_lib.permission.FloatPermissionManager;
  * #                                                   #
  * #####################################################
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
