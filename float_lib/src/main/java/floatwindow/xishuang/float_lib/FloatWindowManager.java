@@ -75,6 +75,7 @@ public class FloatWindowManager {
         mHasShown = true;
         //是否展示小红点展示
         checkRedDot(context);
+
     }
 
     /**
@@ -134,6 +135,10 @@ public class FloatWindowManager {
 
     public static void setOnClickListener(View.OnClickListener onClickListener){
         mFloatLayout.setOnClickListener(onClickListener);
+    }
+
+    public static void setOnLongClickListener(View.OnLongClickListener OnLongClickListener){
+        mFloatLayout.setOnLongClickListener(OnLongClickListener);
     }
 
     /**

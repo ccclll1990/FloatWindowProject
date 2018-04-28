@@ -95,4 +95,9 @@ public class FloatActionController {
         mFloatCallBack.setOnClickListener(onClickListener);
     }
 
+    public void setOnLongClickListener(View.OnLongClickListener OnLongClickListener){
+        if (mFloatCallBack == null) return;
+        mFloatCallBack.setOnLongClickListener(OnLongClickListener);
+    }
+
 }

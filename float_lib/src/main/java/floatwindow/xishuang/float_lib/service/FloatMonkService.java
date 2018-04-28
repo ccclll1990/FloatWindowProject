@@ -99,4 +99,9 @@ public class FloatMonkService extends Service implements FloatCallBack {
     public void setOnClickListener(View.OnClickListener onClickListener){
         FloatWindowManager.setOnClickListener(onClickListener);
     }
+
+    public void setOnLongClickListener(View.OnLongClickListener OnLongClickListener){
+        FloatWindowManager.setOnLongClickListener(OnLongClickListener);
+    }
+
 }

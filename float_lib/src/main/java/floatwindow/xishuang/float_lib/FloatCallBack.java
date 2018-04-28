@@ -19,4 +19,6 @@ public interface FloatCallBack {
     void setObtainNumber(int number);
 
     void setOnClickListener(View.OnClickListener onClickListener);
+
+    void setOnLongClickListener(View.OnLongClickListener onLongClickListener);
 }

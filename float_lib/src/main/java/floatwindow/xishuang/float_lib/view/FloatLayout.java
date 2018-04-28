@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,10 +26,21 @@ public class FloatLayout extends FrameLayout {
     private float mTouchStartX;
     private float mTouchStartY;
     private boolean isclick;
+    //    private boolean isLongclick;
     private WindowManager.LayoutParams mWmParams;
     private Context mContext;
     private long endTime;
     private OnClickListener onClickListener;
+    private OnLongClickListener mLongClickListener;
+
+    //是否移动了
+    private boolean isMoved;
+    //是否释放了
+    private boolean isReleased;
+    //长按的runnable
+    private Runnable mLongPressRunnable;
+    //计数器，防止多次点击导致最后一次形成longpress的时间变短
+    private int mCounter;
 
     public FloatLayout(Context context){
         this(context,null);
@@ -49,6 +61,22 @@ public class FloatLayout extends FrameLayout {
             }
         });
         FloatActionController.getInstance().setObtainNumber(0);
+
+        mLongPressRunnable = new Runnable() {
+
+            @Override
+            public void run(){
+                mCounter--;
+                //计数器大于0，说明当前执行的Runnable不是最后一次down产生的。
+                if (mCounter > 0 || isReleased || isMoved) return;
+
+                if (mLongClickListener != null) {
+                    mLongClickListener.onLongClick(FloatLayout.this);
+                }
+            }
+        };
+
+
     }
 
     @Override
@@ -60,39 +88,49 @@ public class FloatLayout extends FrameLayout {
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+
                 startTime = System.currentTimeMillis();
                 mTouchStartX = event.getX();
                 mTouchStartY = event.getY();
+
+                mCounter++;
+                isReleased = false;
+                isMoved = false;
+                postDelayed(mLongPressRunnable,ViewConfiguration.getLongPressTimeout());
+
                 break;
             case MotionEvent.ACTION_MOVE:
                 //图标移动的逻辑在这里
                 float mMoveStartX = event.getX();
                 float mMoveStartY = event.getY();
                 // 如果移动量大于3才移动
-                if (Math.abs(mTouchStartX - mMoveStartX) > 3
-                        && Math.abs(mTouchStartY - mMoveStartY) > 3) {
+                if (Math.abs(mTouchStartX - mMoveStartX) > 10 && Math.abs(mTouchStartY - mMoveStartY) > 10) {
                     // 更新浮动窗口位置参数
                     mWmParams.x = (int)(x - mTouchStartX);
                     mWmParams.y = (int)(y - mTouchStartY);
                     mWindowManager.updateViewLayout(this,mWmParams);
+                    isMoved = true;
                     return false;
                 }
+
                 break;
             case MotionEvent.ACTION_UP:
                 endTime = System.currentTimeMillis();
-                //当从点击到弹起小于半秒的时候,则判断为点击,如果超过则不响应点击事件
+
+                isReleased = true;
+
+                // 当从点击到弹起小于100毫秒的时候,则判断为点击,如果超过则不响应点击事件
                 isclick = !((endTime - startTime) > 0.1 * 1000L);
+
                 break;
         }
         //响应点击事件
         if (isclick) {
-//            Toast.makeText(mContext,"哈哈哈哈",Toast.LENGTH_SHORT).show();
-
             if (onClickListener != null) {
                 onClickListener.onClick(this);
             }
-
         }
+
         return true;
     }
 
@@ -110,6 +148,10 @@ public class FloatLayout extends FrameLayout {
 
     }
 
+    public void setOnLongClickListener(View.OnLongClickListener onLongClickListener){
+        this.mLongClickListener = onLongClickListener;
+    }
+
     /**
      * 设置小红点显示
      */
@@ -123,4 +165,6 @@ public class FloatLayout extends FrameLayout {
     public void setDragFlagViewText(int number){
         mDraggableFlagView.setText(number + "");
     }
+
+
 }
